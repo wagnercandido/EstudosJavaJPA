@@ -2,6 +2,8 @@ package com.educandoweb.couse.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.educandoweb.couse.entities.enums.PedidoStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,6 +33,9 @@ public class Pedido implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "idCliente")
 	private User cliente;
+
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemPedido> items = new HashSet<>();
 
 	public Pedido() {
 	}
@@ -64,15 +70,19 @@ public class Pedido implements Serializable {
 	public void setCliente(User cliente) {
 		this.cliente = cliente;
 	}
-	
+
 	public PedidoStatus getPedidoStatus() {
 		return PedidoStatus.valueOf(pedidoStatus);
 	}
-	
+
 	public void setPedidoStatus(PedidoStatus pedidoStatus) {
-		if(pedidoStatus != null) {
+		if (pedidoStatus != null) {
 			this.pedidoStatus = pedidoStatus.getCode();
 		}
+	}
+
+	public Set<ItemPedido> getItems() {
+		return items;
 	}
 
 	@Override

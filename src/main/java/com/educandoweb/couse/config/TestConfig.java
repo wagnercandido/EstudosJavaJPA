@@ -9,11 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.educandoweb.couse.entities.Categoria;
+import com.educandoweb.couse.entities.ItemPedido;
 import com.educandoweb.couse.entities.Pedido;
 import com.educandoweb.couse.entities.Produto;
 import com.educandoweb.couse.entities.User;
 import com.educandoweb.couse.entities.enums.PedidoStatus;
 import com.educandoweb.couse.repositories.CategoriaRepository;
+import com.educandoweb.couse.repositories.ItemPedidoRepository;
 import com.educandoweb.couse.repositories.PedidoRepository;
 import com.educandoweb.couse.repositories.ProdutoRepository;
 import com.educandoweb.couse.repositories.UserRepository;
@@ -34,6 +36,9 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
+
 	@Override
 	public void run(String... args) throws Exception {
 
@@ -52,14 +57,14 @@ public class TestConfig implements CommandLineRunner {
 		categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2, categoria3));
 
 		produtoRepository.saveAll(Arrays.asList(produto1, produto2, produto3, produto4, produto5));
-		
+
 		produto1.getCategorias().add(categoria2);
 		produto2.getCategorias().add(categoria1);
 		produto2.getCategorias().add(categoria3);
 		produto3.getCategorias().add(categoria3);
 		produto4.getCategorias().add(categoria3);
 		produto5.getCategorias().add(categoria2);
-		
+
 		produtoRepository.saveAll(Arrays.asList(produto1, produto2, produto3, produto4, produto5));
 
 		User usuario1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
@@ -74,6 +79,12 @@ public class TestConfig implements CommandLineRunner {
 
 		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2, pedido3));
 
+		ItemPedido itemPedido1 = new ItemPedido(pedido1, produto1, 2, produto1.getValor());
+		ItemPedido itemPedido2 = new ItemPedido(pedido1, produto3, 1, produto3.getValor());
+		ItemPedido itemPedido3 = new ItemPedido(pedido2, produto3, 2, produto3.getValor());
+		ItemPedido itemPedido4 = new ItemPedido(pedido3, produto5, 2, produto5.getValor());
+
+		itemPedidoRepository.saveAll(Arrays.asList(itemPedido1, itemPedido2, itemPedido3, itemPedido4));
 	}
 
 }
