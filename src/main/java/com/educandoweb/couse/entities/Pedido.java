@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.educandoweb.couse.entities.enums.PedidoStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -36,7 +38,10 @@ public class Pedido implements Serializable {
 
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> items = new HashSet<>();
-
+	
+	@OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL) // Mapeamento para as duas entidades possuirem o mesmo ID
+	private Pagamento pagamento;
+	
 	public Pedido() {
 	}
 
@@ -80,9 +85,25 @@ public class Pedido implements Serializable {
 			this.pedidoStatus = pedidoStatus.getCode();
 		}
 	}
+	
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
 
 	public Set<ItemPedido> getItems() {
 		return items;
+	}
+	
+	public Double getTotal() {
+		double total = 0;
+		for (ItemPedido item : items) {
+			total += item.getSubTotal();
+		}
+		return total;
 	}
 
 	@Override
