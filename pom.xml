@@ -16,7 +16,7 @@
 	<description>Curso Spring Boot</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>12</java.version>
 	</properties>
 
 	<dependencies>
